@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Projects — lambdasistemi</title>
+<meta name="description" content="The full catalogue of lambdasistemi projects: KERI identity infrastructure, Cardano tooling, and agentic development infrastructure.">
+<link rel="canonical" href="https://lambdasistemi.net/projects.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Projects — lambdasistemi">
+<meta property="og:description" content="KERI identity infrastructure, Cardano tooling, and agentic development infrastructure.">
+<meta property="og:url" content="https://lambdasistemi.net/projects.html">
+<meta property="og:image" content="https://lambdasistemi.net/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <img src="logo.svg" alt="">
+    <a class="brand" href="/">lambdasistemi</a>
+    <div class="navlinks">
+      <a class="optional" href="#identity">Identity</a>
+      <a href="#cardano">Cardano</a>
+      <a href="#agents">Agents</a>
+      <a href="https://github.com/paolino">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap" style="padding-top:3.6rem">
+
+    <section id="identity">
+      <p class="eyebrow">identity</p>
+      <h2>KERI</h2>
+      <p class="section-lede">
+        KERI (Key Event Receipt Infrastructure) is a decentralized
+        key-management protocol built on hash-chained event logs and
+        witnessed receipts, independent of any blockchain. Implementations
+        and tooling across three languages:
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3><a href="https://github.com/paolino/keri-hs">keri-hs</a></h3>
+          <p>KERI (Key Event Receipt Infrastructure) library in Haskell</p>
+          <div class="meta"><span>haskell</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/keri-purs">keri-purs</a></h3>
+          <p>KERI-based collective purchasing</p>
+          <div class="meta"><span>purescript</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/keri-lean">keri-lean</a></h3>
+          <p>Lean 4 formalization of KERI protocol invariants</p>
+          <div class="meta"><span>lean 4</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/kelgroups">kelgroups</a></h3>
+          <p>Polymorphic Haskell library for KEL-based group management with KERI hash-chained events</p>
+          <div class="meta"><span>haskell</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cardano">
+      <p class="eyebrow">blockchain</p>
+      <h2>Cardano</h2>
+      <p class="section-lede">
+        Wallet, signing, and on-chain data-structure work — mostly at
+        Cardano Foundation / lambdasistemi, contributing to
+        <a href="https://github.com/paolino/cardano-wallet">cardano-wallet</a>
+        and building the pieces around it.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3><a href="https://github.com/paolino/aiken-csmt">aiken-csmt</a></h3>
+          <p>Compact Sparse Merkle Trie for Aiken — non-hashed keys preserving ordering</p>
+          <div class="meta"><span>aiken</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/cip-30">cip-30</a></h3>
+          <p>Sign Cardano transactions with Eternl via CIP-30 — partial signing for multisig</p>
+          <div class="meta"><span>web</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/cip100-sign">cip100-sign</a></h3>
+          <p>CIP-100 body hash signer — Cardano BIP32-Ed25519 key derivation and signing from stdin</p>
+          <div class="meta"><span>haskell</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/air-gap-signer">air-gap-signer</a></h3>
+          <p>Blockchain-agnostic air-gapped transaction signer for Raspberry Pi 4</p>
+          <div class="meta"><span>haskell</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/aiken-codegen">aiken-codegen</a></h3>
+          <p>Haskell DSL for generating Aiken source code</p>
+          <div class="meta"><span>haskell</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/haskell-libp2p">haskell-libp2p</a></h3>
+          <p>Haskell bindings for libp2p via Rust FFI</p>
+          <div class="meta"><span>haskell</span><span>rust</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="agents">
+      <p class="eyebrow">infrastructure</p>
+      <h2>Agentic tooling</h2>
+      <p class="section-lede">
+        Infrastructure for running AI coding agents safely and observably —
+        guard rails, MCP servers, and a voice interface.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3><a href="https://github.com/paolino/mcp-worktree-guard">mcp-worktree-guard</a></h3>
+          <p>MCP server enforcing git worktree-per-branch workflow</p>
+          <div class="meta"><span>mcp</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/mcp-merge-guard">mcp-merge-guard</a></h3>
+          <p>MCP server that guards PR merge decisions by validating CI, approvals, conflicts, and branch freshness</p>
+          <div class="meta"><span>mcp</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/voice-agent">voice-agent</a></h3>
+          <p>Voice control for Claude Code via Telegram — send voice messages, get them transcribed, control Claude hands-free</p>
+          <div class="meta"><span>telegram</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/gha-live">gha-live</a></h3>
+          <p>Live Buildkite-style pipeline visualization for GitHub Actions</p>
+          <div class="meta"><span>ci</span></div>
+        </div>
+        <div class="card">
+          <h3><a href="https://github.com/paolino/cardano-dev-skills">cardano-dev-skills</a></h3>
+          <p>Agentic development skills for Cardano devs</p>
+          <div class="meta"><span>skills</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <p class="more"><a href="/">← Home</a></p>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>λs · lambdasistemi.net</span>
+    <span>
+      <a href="https://github.com/paolino">github.com/paolino</a> ·
+      <a href="mailto:paolo.veronelli@gmail.com">paolo.veronelli@gmail.com</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
