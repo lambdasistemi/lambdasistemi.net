@@ -23,12 +23,17 @@ jobs:
           # -c (checksum) instead of times: prod files may be owned by
           # another user, and a non-owner cannot set times on them.
           #
-          # --chmod forces explicit perms on every file rsync touches,
+          # --chmod forces explicit perms on every file/dir rsync touches,
           # new or existing — the runner unit's UMask=0066 otherwise
           # leaves brand-new files at 600 (unreadable by the nginx
-          # container, which hit theme.js on its first deploy).
+          # container, which hit theme.js on its first deploy) and new
+          # directories at 711 (unwritable by any *other* runner in the
+          # github-runners group, which hit lambda-calculus/ the first
+          # time a deploy created it). D2775 matches the mode the prod
+          # directory itself carries — group-writable, setgid so new
+          # entries keep inheriting the group.
           nix run nixpkgs#rsync -- -rlcv --delete \
-            --chmod=D755,F644 \
+            --chmod=D2775,F644 \
             --exclude='.git*' --exclude='.github' \
             ./ /srv/prod-hot/personal-sites/lambdasistemi/
 
