@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lambdasistemi</title>
+<link rel="icon" href="logo.svg">
+<style>
+  :root {
+    --bg: #0b0d10;
+    --bg2: #12151a;
+    --fg: #e6e8eb;
+    --muted: #8b95a1;
+    --accent: #7dd3fc;
+    --accent2: #a78bfa;
+    --border: #232830;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.55;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  header {
+    padding: 4rem 1.5rem 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  header h1 {
+    font-size: 2.2rem;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  header p.tagline {
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin: 0 0 1.5rem;
+    max-width: 60ch;
+  }
+  header .links a {
+    margin-right: 1.2rem;
+    font-size: 0.95rem;
+  }
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+  section { margin-bottom: 3rem; }
+  section h2 {
+    font-size: 1.3rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+  section p.section-lede {
+    color: var(--muted);
+    max-width: 65ch;
+    margin: 0 0 1.5rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+    transition: border-color 0.15s ease;
+  }
+  .card:hover { border-color: var(--accent); }
+  .card h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+  }
+  .card h3 a { color: var(--fg); }
+  .card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .apps .card { border-color: rgba(167, 139, 250, 0.3); }
+  .apps .card:hover { border-color: var(--accent2); }
+  footer {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 3rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>lambdasistemi</h1>
+  <p class="tagline">
+    Cryptographic identity infrastructure and Cardano tooling, mostly in
+    Haskell — plus the small self-hosted apps that keep running because
+    people actually use them.
+  </p>
+  <div class="links">
+    <a href="https://github.com/paolino">github.com/paolino</a>
+    <a href="mailto:paolo.veronelli@gmail.com">email</a>
+  </div>
+</header>
+
+<main>
+
+  <section>
+    <h2>Identity — KERI</h2>
+    <p class="section-lede">
+      KERI (Key Event Receipt Infrastructure) is a decentralized
+      key-management protocol built on hash-chained event logs and
+      witnessed receipts, independent of any blockchain. Implementations
+      and tooling across three languages:
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3><a href="https://github.com/paolino/keri-hs">keri-hs</a></h3>
+        <p>KERI (Key Event Receipt Infrastructure) library in Haskell</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/keri-purs">keri-purs</a></h3>
+        <p>KERI-based collective purchasing</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/keri-lean">keri-lean</a></h3>
+        <p>Lean 4 formalization of KERI protocol invariants</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/kelgroups">kelgroups</a></h3>
+        <p>Polymorphic Haskell library for KEL-based group management with KERI hash-chained events</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cardano</h2>
+    <p class="section-lede">
+      Wallet, signing, and on-chain data-structure work — mostly at
+      Cardano Foundation / lambdasistemi, contributing to
+      <a href="https://github.com/paolino/cardano-wallet">cardano-wallet</a>
+      and building the pieces around it.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3><a href="https://github.com/paolino/aiken-csmt">aiken-csmt</a></h3>
+        <p>Compact Sparse Merkle Trie for Aiken — non-hashed keys preserving ordering</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/cip-30">cip-30</a></h3>
+        <p>Sign Cardano transactions with Eternl via CIP-30 — partial signing for multisig</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/cip100-sign">cip100-sign</a></h3>
+        <p>CIP-100 body hash signer — Cardano BIP32-Ed25519 key derivation and signing from stdin</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/air-gap-signer">air-gap-signer</a></h3>
+        <p>Blockchain-agnostic air-gapped transaction signer for Raspberry Pi 4</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/aiken-codegen">aiken-codegen</a></h3>
+        <p>Haskell DSL for generating Aiken source code</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/haskell-libp2p">haskell-libp2p</a></h3>
+        <p>Haskell bindings for libp2p via Rust FFI</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Agentic tooling</h2>
+    <p class="section-lede">
+      Infrastructure for running AI coding agents safely and observably —
+      guard rails, MCP servers, and a voice interface.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3><a href="https://github.com/paolino/mcp-worktree-guard">mcp-worktree-guard</a></h3>
+        <p>MCP server enforcing git worktree-per-branch workflow</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/mcp-merge-guard">mcp-merge-guard</a></h3>
+        <p>MCP server that guards PR merge decisions by validating CI, approvals, conflicts, and branch freshness</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/voice-agent">voice-agent</a></h3>
+        <p>Voice control for Claude Code via Telegram — send voice messages, get them transcribed, control Claude hands-free</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/gha-live">gha-live</a></h3>
+        <p>Live Buildkite-style pipeline visualization for GitHub Actions</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/paolino/cardano-dev-skills">cardano-dev-skills</a></h3>
+        <p>Agentic development skills for Cardano devs</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="apps">
+    <h2>Running in production</h2>
+    <p class="section-lede">
+      Not demos — actual services, actual users.
+    </p>
+    <div class="grid">
+      <div class="card">
+        <h3><a href="/reactivegas/">reactivegas</a></h3>
+        <p>Distributed administration for a solidarity purchasing group (GAS) — prepaid accounts, group ledgers. Running continuously since 2015.</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://plutimus.com/giacenza">giacenza</a></h3>
+        <p>Media-cost inventory calculator, entirely browser-side (PureScript + Halogen) — <a href="https://github.com/paolino/giacenza-browser">source</a></p>
+      </div>
+      <div class="card">
+        <h3><a href="http://labottegadiluca.it">labottegadiluca</a></h3>
+        <p>A woodworker's studio site</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <a href="https://github.com/paolino">github.com/paolino</a> ·
+  <a href="mailto:paolo.veronelli@gmail.com">paolo.veronelli@gmail.com</a>
+</footer>
+
+</body>
+</html>
