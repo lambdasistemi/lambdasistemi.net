@@ -20,7 +20,9 @@ jobs:
       # The runner PATH has no rsync/curl; pull them through nix.
       - name: Sync to production
         run: |
-          nix run nixpkgs#rsync -- -rltcv --delete \
+          # -c (checksum) instead of times: prod files may be owned by
+          # another user, and a non-owner cannot set times on them.
+          nix run nixpkgs#rsync -- -rlcv --delete \
             --exclude='.git*' --exclude='.github' \
             ./ /srv/prod-hot/personal-sites/lambdasistemi/
 
