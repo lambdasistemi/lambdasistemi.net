@@ -22,7 +22,13 @@ jobs:
         run: |
           # -c (checksum) instead of times: prod files may be owned by
           # another user, and a non-owner cannot set times on them.
+          #
+          # --chmod forces explicit perms on every file rsync touches,
+          # new or existing — the runner unit's UMask=0066 otherwise
+          # leaves brand-new files at 600 (unreadable by the nginx
+          # container, which hit theme.js on its first deploy).
           nix run nixpkgs#rsync -- -rlcv --delete \
+            --chmod=D755,F644 \
             --exclude='.git*' --exclude='.github' \
             ./ /srv/prod-hot/personal-sites/lambdasistemi/
 
@@ -30,7 +36,7 @@ jobs:
         # curl and diff are not on the runner PATH either
         run: |
           nix shell nixpkgs#curl nixpkgs#diffutils --command bash -e -c '
-            for p in "" projects.html styles.css logo.svg og.png; do
+            for p in "" projects.html styles.css theme.js logo.svg og.png; do
               curl -sf -o /dev/null "https://lambdasistemi.net/$p"
             done
             curl -s https://lambdasistemi.net/index.html | diff - index.html
