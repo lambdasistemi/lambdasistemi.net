@@ -6,7 +6,7 @@
   --bg3: #151b24;
   --fg: #e8ebef;
   --muted: #96a0ac;
-  --faint: #5e6874;
+  --faint: #74808d;
   --accent: #7dd3fc;
   --accent-rgb: 125, 211, 252;
   --accent2: #a78bfa;
@@ -35,7 +35,11 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* clears the sticky nav (taller on mobile, where it wraps to two lines) */
+  scroll-padding-top: 5.5rem;
+}
 
 body {
   margin: 0;
@@ -310,6 +314,15 @@ footer a { color: var(--muted); }
 
 @media (max-width: 560px) {
   .hero .wrap { padding-top: 3rem; padding-bottom: 2.6rem; }
-  nav .navlinks { gap: 0.8rem; flex-wrap: wrap; }
   nav .navlinks a.optional { display: none; }
+  /* two clean rows instead of an organic wrap: logo/brand/toggle on row 1,
+     remaining links centered on their own full-width row 2 */
+  nav .wrap { flex-wrap: wrap; row-gap: 0.5rem; }
+  nav .navlinks {
+    order: 10;
+    flex-basis: 100%;
+    justify-content: center;
+    gap: 1.3rem;
+  }
+  nav .navlinks a { padding: 0.3rem 0; }
 }
