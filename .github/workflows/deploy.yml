@@ -36,7 +36,7 @@ jobs:
         # curl and diff are not on the runner PATH either
         run: |
           nix shell nixpkgs#curl nixpkgs#diffutils --command bash -e -c '
-            for p in "" projects.html styles.css theme.js logo.svg og.png; do
+            for p in "" projects.html styles.css theme.js logo.svg og.png sitemap.xml robots.txt lambda-calculus/ lambda-calculus/app.html lambda-calculus/bin.wasm lambda-calculus/ghc_wasm_jsffi.js lambda-calculus/index.js; do
               curl -sf -o /dev/null "https://lambdasistemi.net/$p"
             done
             curl -s https://lambdasistemi.net/index.html | diff - index.html
