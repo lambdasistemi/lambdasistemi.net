@@ -238,6 +238,15 @@ section h2 {
 /* secondary links inside a card must sit above the stretched link */
 .card p a { position: relative; z-index: 1; }
 
+.card p.note {
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  color: var(--faint);
+  border-top: 1px dashed var(--border);
+  padding-top: 0.45rem;
+  margin-top: 0.35rem;
+}
+
 /* ---- footer ---- */
 
 footer { border-top: 1px solid var(--border); }
