@@ -27,9 +27,11 @@ jobs:
             ./ /srv/prod-hot/personal-sites/lambdasistemi/
 
       - name: Smoke check the live site
+        # curl and diff are not on the runner PATH either
         run: |
-          for p in "" projects.html styles.css logo.svg og.png; do
-            nix run nixpkgs#curl -- -sf -o /dev/null "https://lambdasistemi.net/$p"
-          done
-          nix run nixpkgs#curl -- -s https://lambdasistemi.net/index.html \
-            | diff - index.html
+          nix shell nixpkgs#curl nixpkgs#diffutils --command bash -e -c '
+            for p in "" projects.html styles.css logo.svg og.png; do
+              curl -sf -o /dev/null "https://lambdasistemi.net/$p"
+            done
+            curl -s https://lambdasistemi.net/index.html | diff - index.html
+          '
