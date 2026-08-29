@@ -1,0 +1,33 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # epyc runners serve lambdasistemi.net from a local bind mount;
+    # the deploy is a plain file sync on the serving host.
+    runs-on: [self-hosted, nixos, epyc]
+    steps:
+      - uses: actions/checkout@v4
+
+      # The runner PATH has no rsync/curl; pull them through nix.
+      - name: Sync to production
+        run: |
+          nix run nixpkgs#rsync -- -rltcv --delete \
+            --exclude='.git*' --exclude='.github' \
+            ./ /srv/prod-hot/personal-sites/lambdasistemi/
+
+      - name: Smoke check the live site
+        run: |
+          for p in "" projects.html styles.css logo.svg og.png; do
+            nix run nixpkgs#curl -- -sf -o /dev/null "https://lambdasistemi.net/$p"
+          done
+          nix run nixpkgs#curl -- -s https://lambdasistemi.net/index.html \
+            | diff - index.html
