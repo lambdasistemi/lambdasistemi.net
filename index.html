@@ -5,11 +5,11 @@
 <script>(function(){var t=localStorage.getItem('theme');document.documentElement.setAttribute('data-theme',t||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'));})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>lambdasistemi — Paolo Veronelli</title>
-<meta name="description" content="Paolo Veronelli — cryptographic identity infrastructure (KERI), Cardano tooling, and agentic development infrastructure, mostly in Haskell. Plus small self-hosted apps that keep running because people actually use them.">
+<meta name="description" content="Paolo Veronelli — software for the agentic era: cryptographic identity infrastructure (KERI), Cardano tooling, Lean 4 formalization, and infrastructure for running AI coding agents safely, mostly in Haskell.">
 <link rel="canonical" href="https://lambdasistemi.net/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="lambdasistemi — Paolo Veronelli">
-<meta property="og:description" content="Cryptographic identity infrastructure (KERI), Cardano tooling, and agentic development infrastructure, mostly in Haskell.">
+<meta property="og:description" content="Software for the agentic era: identity infrastructure, Cardano tooling, Lean 4 proofs, and agent-run development, mostly in Haskell.">
 <meta property="og:url" content="https://lambdasistemi.net/">
 <meta property="og:image" content="https://lambdasistemi.net/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -23,6 +23,7 @@
     <img src="logo.svg" alt="">
     <a class="brand" href="/">lambdasistemi</a>
     <div class="navlinks">
+      <a class="optional" href="#thesis">Thesis</a>
       <a href="#work">Work</a>
       <a class="optional" href="#capabilities">Capabilities</a>
       <a class="optional" href="#production">Production</a>
@@ -40,11 +41,13 @@
   <div class="wrap">
     <img class="mark" src="logo.svg" alt="lambdasistemi λ logo">
     <p class="who">the one-person firm of paolo veronelli</p>
-    <h1>Identity, <span class="grad">Cardano</span>, and the tooling around agents.</h1>
+    <h1>Code is cheap. <span class="grad">Trust</span> isn't.</h1>
     <p class="tagline">
-      Cryptographic identity infrastructure and Cardano tooling, mostly in
-      Haskell — plus the small self-hosted apps that keep running because
-      people actually use them.
+      Agents now write most of the code. The scarce skill is knowing what a
+      system must do — and being able to trust that it does. I build the
+      trust-shaped half: cryptographic identity infrastructure, Cardano
+      tooling, and agent-run development, mostly in Haskell — plus the small
+      self-hosted apps that keep running because people actually use them.
     </p>
     <div class="links">
       <a href="https://github.com/paolino">github.com/paolino</a>
@@ -55,6 +58,49 @@
 
 <main>
   <div class="wrap">
+
+    <section id="thesis">
+      <p class="eyebrow">the thesis</p>
+      <h2>Software for the agentic era</h2>
+      <p class="section-lede">
+        The marginal cost of producing code has collapsed — agents draft it
+        by the thousand lines. What stays scarce is knowing what the code
+        must do, and being able to trust that it does. Everything on this
+        page is built on that belief.
+      </p>
+      <div class="grid two">
+        <div class="card">
+          <h3>Specify behavior, not implementation</h3>
+          <p>The durable artifact is the specification: the state a system
+             holds, the events it accepts, and what may never happen. Each
+             rule starts as a user story and becomes something checkable —
+             a property test, an executable spec, a theorem.</p>
+        </div>
+        <div class="card">
+          <h3>Make trust mechanical</h3>
+          <p>A model produces plausible code and plausible tests — plausibility
+             is what it is optimized for. So every claim climbs a ladder of
+             evidence: types, tests, property-based tests, executable
+             specifications, formal proofs. Done arrives with evidence
+             attached, or it doesn't arrive.</p>
+        </div>
+        <div class="card">
+          <h3>Run agents like an organization</h3>
+          <p>Written mandates for every delegation. Executable gates that
+             freeze the definition of done before work starts. Independent
+             auditors on different model families reviewing what the builders
+             built: the one who writes the change is never the one who
+             accepts it.</p>
+        </div>
+        <div class="card">
+          <h3>Formalize what must not break</h3>
+          <p>For the kernel of a system — a ledger, a protocol, an identity
+             scheme — invariants that hold in every reachable state, checked
+             by a machine. Refactors that fail loudly instead of silently.
+             Documentation that cannot rot, because it compiles.</p>
+        </div>
+      </div>
+    </section>
 
     <section id="work">
       <p class="eyebrow">selected work</p>
@@ -105,8 +151,8 @@
       <p class="eyebrow">capabilities</p>
       <h2>How the work gets done</h2>
       <p class="section-lede">
-        The interests and the capacity behind the repos — what a curious
-        reader should take away.
+        The interests and the capacity behind the repos — the discipline the
+        thesis is held to in practice.
       </p>
       <div class="grid two">
         <div class="card">
@@ -176,8 +222,9 @@
       <p class="eyebrow">contact</p>
       <h2>Get in touch</h2>
       <p class="section-lede">
-        Open to conversations about identity infrastructure, Cardano, and
-        agent tooling — <a href="mailto:paolo.veronelli@gmail.com">paolo.veronelli@gmail.com</a>.
+        Open to conversations about identity infrastructure, Cardano,
+        formal methods, and building software with agents —
+        <a href="mailto:paolo.veronelli@gmail.com">paolo.veronelli@gmail.com</a>.
       </p>
     </section>
 

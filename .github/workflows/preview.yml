@@ -1,0 +1,50 @@
+name: preview
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+      - closed
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  preview:
+    # skip only the close event; publish on open/sync/reopen/ready
+    if: github.event.action != 'closed'
+    runs-on: nixos
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Plain static site — no build. Assemble a clean root without VCS
+      # or CI metadata before publishing. The runner PATH has no rsync;
+      # pull it through nix (same pattern as deploy.yml).
+      - name: Assemble preview root
+        run: |
+          nix run nixpkgs#rsync -- -a \
+            --exclude='.git' --exclude='.github' \
+            ./ site-root/
+
+      - name: Publish shared preview
+        uses: paolino/dev-assets/static-preview@main
+        with:
+          path: site-root
+          comment-marker: "<!-- lambdasistemi-preview-url -->"
+
+  preview-cleanup:
+    if: github.event.action == 'closed'
+    runs-on: nixos
+
+    steps:
+      - name: Remove shared preview
+        uses: paolino/dev-assets/static-preview@main
+        with:
+          mode: cleanup
