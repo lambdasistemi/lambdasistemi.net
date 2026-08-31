@@ -27,4 +27,3 @@ Object.assign(instance_exports, instance.exports);
 
 wasi.initialize(instance);
 await instance.exports.hs_start();
-
