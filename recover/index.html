@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get my Secret Key</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { color-scheme: light dark; --fg:#1b1b1f; --bg:#fafafa; --card:#fff; --muted:#666; --accent:#0b57d0; --line:#ddd; --ok:#0a7d33; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e6e6ea; --bg:#121214; --card:#1c1c20; --muted:#9a9aa3; --accent:#8ab4f8; --line:#333; --ok:#5bd68a; } }
+  body { font: 17px/1.55 system-ui, sans-serif; background: var(--bg); color: var(--fg); margin: 0; padding: 16px; }
+  main { max-width: 38rem; margin: 2rem auto; }
+  h1 { font-size: 1.5rem; margin: 0 0 .25rem; }
+  .sub { color: var(--muted); margin: 0 0 1.5rem; }
+  ol { padding-left: 1.25rem; } li { margin-bottom: .75rem; }
+  .cmd { display: flex; gap: .5rem; align-items: stretch; margin: .5rem 0 1rem; }
+  code.line { flex: 1; background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: .65rem .8rem; font: 15px ui-monospace, monospace; overflow-x: auto; white-space: nowrap; }
+  button { font: inherit; padding: 0 1rem; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+  .tabs { display: flex; gap: .5rem; margin-bottom: .75rem; }
+  .tabs button { background: transparent; color: var(--accent); padding: .4rem .9rem; }
+  .tabs button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+  .note { color: var(--muted); font-size: .92rem; }
+  a { color: var(--accent); }
+  .done { color: var(--ok); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Get my Secret Key</h1>
+  <p class="sub">Plug in your hardware key, then do these three things.</p>
+
+  <div class="tabs" role="group" aria-label="Your computer">
+    <button id="t-unix" aria-pressed="true">Linux / Mac</button>
+    <button id="t-win" aria-pressed="false">Windows</button>
+  </div>
+
+  <ol>
+    <li id="open"></li>
+    <li>Paste this and press Enter:
+      <div class="cmd"><code class="line" id="cmd"></code><button id="copy">Copy</button></div>
+    </li>
+    <li>When asked, type your key's <strong>PIN</strong> and <strong>touch the key</strong>.
+        Your Secret Key goes onto the clipboard.</li>
+  </ol>
+
+  <p>Then open <a href="https://my.1password.com/signin" target="_blank" rel="noopener">my.1password.com</a>:
+     your email, <strong>paste</strong> the Secret Key, then your password.</p>
+
+  <p class="note">The command downloads two public programs, checks them against fixed checksums, runs once and deletes itself.
+     It never shows the key on screen unless there is no clipboard.</p>
+</main>
+<script>
+  const base = new URL('.', location.href).href.replace(/\/$/, '');
+  const cmds = { unix: `curl -fsSL ${base}/recover.sh | sh`, win: `irm ${base}/recover.ps1 | iex` };
+  const opens = { unix: 'Open a <strong>terminal</strong> (on Mac: Terminal; on Linux: Ctrl+Alt+T).',
+                  win: 'Right-click <strong>Start</strong> and choose <strong>Terminal (Admin)</strong> or <strong>PowerShell (Admin)</strong>.' };
+  let os = /Win/i.test(navigator.platform) ? 'win' : 'unix';
+  function show() {
+    document.getElementById('cmd').textContent = cmds[os];
+    document.getElementById('open').innerHTML = opens[os];
+    document.getElementById('t-unix').setAttribute('aria-pressed', os === 'unix');
+    document.getElementById('t-win').setAttribute('aria-pressed', os === 'win');
+    document.getElementById('copy').textContent = 'Copy';
+  }
+  document.getElementById('t-unix').onclick = () => { os = 'unix'; show(); };
+  document.getElementById('t-win').onclick = () => { os = 'win'; show(); };
+  document.getElementById('copy').onclick = async () => {
+    await navigator.clipboard.writeText(cmds[os]);
+    document.getElementById('copy').textContent = 'Copied';
+  };
+  show();
+</script>
+</body>
+</html>
