@@ -4,50 +4,64 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Set up the box</title>
+<title>Recover box: manage</title>
 <style>
   :root { color-scheme: light dark; --fg:#1b1b1f; --bg:#f6f7fb; --card:#fff; --muted:#5f6368; --accent:#1a73e8; --ok:#137333; --bad:#b3261e; --line:#dadce0; --warn:#fef7e0; }
   @media (prefers-color-scheme: dark) { :root { --fg:#e8eaed; --bg:#16171a; --card:#202124; --muted:#9aa0a6; --accent:#8ab4f8; --ok:#81c995; --bad:#f28b82; --line:#3c4043; --warn:#3b3320; } }
   body { font: 16px/1.5 system-ui, sans-serif; background: var(--bg); color: var(--fg); margin: 0; padding: 16px; }
-  main { max-width: 42rem; margin: 1.5rem auto; }
+  main { max-width: 44rem; margin: 1.5rem auto; }
   section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
-  h1 { font-size: 1.4rem; } h2 { font-size: 1rem; margin: 0 0 .5rem; }
-  button { font: inherit; padding: .55rem 1rem; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+  h1 { font-size: 1.4rem; margin: 0 0 .5rem; } h2 { font-size: 1rem; margin: 0 0 .5rem; }
+  button { font: inherit; padding: .5rem .9rem; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
   button.q { background: transparent; color: var(--accent); } button[disabled] { opacity: .5; }
-  textarea, input { width: 100%; font: 14px ui-monospace, monospace; padding: .5rem; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); box-sizing: border-box; }
-  .warn { background: var(--warn); border-radius: 8px; padding: .6rem .8rem; font-size: .9rem; }
+  input[type=checkbox] { width: auto; }
+  textarea, input:not([type=checkbox]) { width: 100%; font: 14px ui-monospace, monospace; padding: .5rem; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); box-sizing: border-box; }
+  label.f { display: block; margin-top: .5rem; }
+  .warn { background: var(--warn); border-radius: 8px; padding: .6rem .8rem; font-size: .9rem; margin-bottom: 1rem; }
   .ok { color: var(--ok); } .bad { color: var(--bad); } .muted { color: var(--muted); font-size: .9rem; }
-  .row { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .6rem; }
+  .row { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .6rem; align-items: center; }
+  table { width: 100%; border-collapse: collapse; } td { padding: .35rem .3rem; border-bottom: 1px solid var(--line); } td.r { text-align: right; }
 </style>
 </head>
 <body>
 <main>
-  <h1>Set up the box</h1>
+  <h1>Recover box</h1>
+  <p class="muted">Keep secrets behind a hardware key. Each item has a title, a web address to open, and a secret to copy.</p>
   <div class="warn" id="where"></div>
 
   <section>
-    <h2>1. The box that exists</h2>
+    <h2>The box</h2>
     <div id="state" class="muted">looking for box.json…</div>
-    <div class="row"><button class="q" id="unlockExisting" hidden>Unlock it with a key that is already in it</button><button class="q" id="startNew" hidden>Start a new box instead (replaces the existing one when you publish)</button></div>
+    <div class="row">
+      <button class="q" id="unlock" hidden>Unlock it with a key that is in it</button>
+      <button class="q" id="startNew" hidden>Start a new box instead</button>
+    </div>
     <div id="unlockMsg" class="muted"></div>
   </section>
 
-  <section id="newNote">
-    <h2>2. What to protect (only for a new box)</h2>
-    <p class="muted">Paste the whole recovery note. It is locked in this page and cleared from the box below as soon as it is used.</p>
-    <textarea id="note" rows="5" spellcheck="false" autocomplete="off"></textarea>
+  <section id="itemsBox" hidden>
+    <h2>Items</h2>
+    <table id="list"></table>
+    <div class="row" style="display:block">
+      <label class="f muted" for="title">Title</label><input id="title" placeholder="e.g. 1Password" autocomplete="off">
+      <label class="f muted" for="url">Field 1: where to go (https address)</label><input id="url" placeholder="https://my.1password.com/signin" autocomplete="off" spellcheck="false">
+      <label class="f muted" for="secret">Field 2: the secret to copy</label><input id="secret" type="password" autocomplete="off" spellcheck="false">
+      <label class="muted"><input type="checkbox" id="showsec"> show it while typing</label>
+      <div class="row"><button id="addItem">Add item</button></div>
+      <div id="itemMsg" class="muted"></div>
+    </div>
   </section>
 
-  <section>
-    <h2>3. Add the key that is plugged in</h2>
-    <input id="name" placeholder="name, e.g. hk-phone" value="hk-phone">
-    <div class="row"><button id="add">Add this key</button></div>
-    <div id="addMsg" class="muted"></div>
+  <section id="keysBox" hidden>
+    <h2>Keys that open this box</h2>
+    <div id="keys" class="muted"></div>
+    <div class="row"><input id="keyName" placeholder="name of the key that is plugged in, e.g. hk-phone" style="flex:1"><button id="addKey">Add this key</button></div>
+    <div id="keyMsg" class="muted"></div>
   </section>
 
   <section id="outBox" hidden>
-    <h2>4. The new box (public, safe to publish)</h2>
-    <textarea id="out" rows="8" readonly spellcheck="false"></textarea>
+    <h2>The new file (public, safe to publish)</h2>
+    <textarea id="out" rows="6" readonly spellcheck="false"></textarea>
     <div class="row"><button id="download">Download box.json</button><button class="q" id="verify">Test: unlock it now</button></div>
     <div id="verifyMsg" class="muted"></div>
   </section>
@@ -57,51 +71,76 @@
 const $ = (id) => document.getElementById(id);
 const L = { e_cancel: 'It was cancelled or timed out. Try again and touch the key when it answers.',
             e_nokey: 'This browser or key cannot do this (Chrome or Edge, key plugged in).', e_other: 'Something went wrong: ' };
-let box = null, dataKey = null, created = null;
+const say = (id, text, cls) => { const el = $(id); el.className = cls || 'muted'; el.textContent = text; };
+let box = null, vault = null, data = null, plain = [];
+
 $('where').innerHTML = RP === 'localhost'
-  ? '<strong>Rehearsal on localhost.</strong> Keys added here do NOT work on lambdasistemi.net. Use a dummy note.'
+  ? '<strong>Rehearsal on localhost.</strong> Keys added here do NOT work on lambdasistemi.net. Use dummy values.'
   : '<strong>Real address: ' + RP + '.</strong> Keys added here belong to this address only.';
+
+function render() {
+  const open = !!data;
+  $('itemsBox').hidden = !open; $('keysBox').hidden = !open;
+  const list = $('list'); list.textContent = '';
+  plain.forEach((it, i) => {
+    const tr = document.createElement('tr');
+    const a = document.createElement('td'); a.textContent = it.title || '(no title)';
+    const b = document.createElement('td'); b.className = 'muted'; b.textContent = (safeUrl(it.url) ? new URL(it.url).host : 'no address') + ', secret of ' + it.secret.length + ' characters';
+    const c = document.createElement('td'); c.className = 'r'; const d = document.createElement('button'); d.className = 'q'; d.textContent = 'Delete';
+    d.onclick = async () => { plain.splice(i, 1); await rebuildItems(); render(); };
+    c.appendChild(d); tr.append(a, b, c); list.appendChild(tr);
+  });
+  if (!plain.length) { const tr = document.createElement('tr'); const td = document.createElement('td'); td.className = 'muted'; td.textContent = 'No items yet.'; tr.appendChild(td); list.appendChild(tr); }
+  $('keys').textContent = vault && vault.keys.length ? vault.keys.map((k) => k.name).join(', ') : 'None yet: add at least one key before you publish.';
+  const ready = open && vault.keys.length > 0;
+  $('outBox').hidden = !ready;
+  if (ready) $('out').value = JSON.stringify(vault, null, 2);
+}
+async function rebuildItems() { vault = { ...vault, items: await Promise.all(plain.map((it) => encryptItem(data, it))) }; }
+
 (async () => {
   box = await loadBox('box.json');
-  $('state').textContent = box ? 'Found: ' + box.entries.length + ' key(s): ' + box.entries.map((e) => e.name).join(', ') : 'None yet: this will create a new box.';
-  $('unlockExisting').hidden = !box; $('newNote').hidden = !!box;
-  $('startNew').hidden = !box;
+  if (box) { say('state', 'Found: ' + keysOf(box).length + ' key(s), version ' + box.v + '. Unlock it to manage it, or start a new box.');
+             $('unlock').hidden = false; $('startNew').hidden = false; }
+  else { say('state', 'No box yet: creating a new one.'); startNew(); }
 })();
-$('startNew').onclick = () => {
-  box = null; dataKey = null; $('state').textContent = 'Starting a NEW box. The one that exists now is replaced only when you publish the new file.';
-  $('unlockExisting').hidden = true; $('startNew').hidden = true; $('newNote').hidden = false; $('unlockMsg').textContent = '';
-};
-$('unlockExisting').onclick = async () => {
-  $('unlockMsg').textContent = 'Waiting for a key already in the box (PIN, then touch)...';
-  try { dataKey = await unlockDataKey(box); $('unlockMsg').innerHTML = '<span class="ok">Unlocked: you can add another key now.</span>'; }
-  catch (e) { $('unlockMsg').innerHTML = '<span class="bad">' + niceError(e, L) + '</span>'; }
-};
-$('add').onclick = async () => {
-  const name = $('name').value.trim(); if (!name) { $('addMsg').textContent = 'Give the key a name.'; return; }
-  $('add').disabled = true;
+function startNew() {
+  data = newDataKey(); vault = emptyVault(); plain = [];
+  $('unlock').hidden = true; $('startNew').hidden = true; say('unlockMsg', 'Starting a NEW box. The published one is replaced only when you publish the new file.');
+  render();
+}
+$('startNew').onclick = startNew;
+$('unlock').onclick = async () => {
+  say('unlockMsg', 'Waiting for a key that is in the box (PIN, then touch)...');
   try {
-    let out;
-    if (box) {
-      if (!dataKey) throw new Error('First unlock the existing box with a key that is already in it (section 1).');
-      $('addMsg').textContent = 'Waiting for the NEW key: PIN and touch, twice...';
-      out = await addKey(box, name, null, dataKey);
-    } else {
-      const note = $('note').value; if (!note.trim()) throw new Error('Paste the note to protect (section 2).');
-      $('addMsg').textContent = 'Waiting for your key: PIN and touch, twice...';
-      out = await addKey(null, name, note, null);
-      $('note').value = '';
-    }
-    created = out; $('out').value = JSON.stringify(out, null, 2); $('outBox').hidden = false;
-    $('addMsg').innerHTML = '<span class="ok">Added "' + name + '". Download the file and publish it as box.json.</span>';
-  } catch (e) { $('addMsg').innerHTML = '<span class="bad">' + niceError(e, L) + '</span>'; }
-  finally { $('add').disabled = false; }
+    data = await unlockVault(box); plain = await listItems(box, data);
+    vault = { v: 2, rpId: box.rpId, keys: keysOf(box), items: [] }; await rebuildItems();
+    say('unlockMsg', 'Unlocked: ' + plain.length + ' item(s).', 'ok'); render();
+  } catch (e) { data = null; say('unlockMsg', niceError(e, L), 'bad'); }
+};
+$('showsec').onchange = (e) => { $('secret').type = e.target.checked ? 'text' : 'password'; };
+$('addItem').onclick = async () => {
+  const title = $('title').value.trim(), url = $('url').value.trim(), secret = $('secret').value;
+  if (!title) return say('itemMsg', 'Give the item a title.', 'bad');
+  if (!safeUrl(url)) return say('itemMsg', 'Field 1 must be a web address starting with https://', 'bad');
+  if (!secret) return say('itemMsg', 'Field 2 (the secret) is empty.', 'bad');
+  plain.push({ title, url, secret }); await rebuildItems();
+  $('title').value = ''; $('url').value = ''; $('secret').value = '';
+  say('itemMsg', 'Added "' + title + '".', 'ok'); render();
+};
+$('addKey').onclick = async () => {
+  const name = $('keyName').value.trim(); if (!name) return say('keyMsg', 'Give the key a name.', 'bad');
+  $('addKey').disabled = true; say('keyMsg', 'Waiting for the key that is plugged in: PIN and touch, twice...');
+  try { vault = await enrolKey(vault, name, data); $('keyName').value = ''; say('keyMsg', 'Added "' + name + '".', 'ok'); render(); }
+  catch (e) { say('keyMsg', niceError(e, L), 'bad'); }
+  finally { $('addKey').disabled = false; }
 };
 $('download').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([$('out').value], { type: 'application/json' })); a.download = 'box.json'; a.click(); };
 $('verify').onclick = async () => {
-  $('verifyMsg').textContent = 'Unlocking the new box with a key in it (PIN, touch)...';
-  try { const d = await unlockDataKey(created); const note = await decryptNote(created, d);
-        $('verifyMsg').innerHTML = '<span class="ok">It opens. It contains a Secret Key: ' + (SECRET_KEY_RE.test(note) ? 'yes' : 'NO (check what you pasted)') + ' (' + note.length + ' characters).</span>'; }
-  catch (e) { $('verifyMsg').innerHTML = '<span class="bad">' + niceError(e, L) + '</span>'; }
+  say('verifyMsg', 'Unlocking the new file with a key in it (PIN, touch)...');
+  try { const d = await unlockVault(vault); const items = await listItems(vault, d);
+        say('verifyMsg', 'It opens: ' + items.length + ' item(s): ' + items.map((i) => i.title).join(', '), 'ok'); }
+  catch (e) { say('verifyMsg', niceError(e, L), 'bad'); }
 };
 </script>
 </body>
