@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Set up the box</title>
+<style>
+  :root { color-scheme: light dark; --fg:#1b1b1f; --bg:#f6f7fb; --card:#fff; --muted:#5f6368; --accent:#1a73e8; --ok:#137333; --bad:#b3261e; --line:#dadce0; --warn:#fef7e0; }
+  @media (prefers-color-scheme: dark) { :root { --fg:#e8eaed; --bg:#16171a; --card:#202124; --muted:#9aa0a6; --accent:#8ab4f8; --ok:#81c995; --bad:#f28b82; --line:#3c4043; --warn:#3b3320; } }
+  body { font: 16px/1.5 system-ui, sans-serif; background: var(--bg); color: var(--fg); margin: 0; padding: 16px; }
+  main { max-width: 42rem; margin: 1.5rem auto; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  h1 { font-size: 1.4rem; } h2 { font-size: 1rem; margin: 0 0 .5rem; }
+  button { font: inherit; padding: .55rem 1rem; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+  button.q { background: transparent; color: var(--accent); } button[disabled] { opacity: .5; }
+  textarea, input { width: 100%; font: 14px ui-monospace, monospace; padding: .5rem; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); box-sizing: border-box; }
+  .warn { background: var(--warn); border-radius: 8px; padding: .6rem .8rem; font-size: .9rem; }
+  .ok { color: var(--ok); } .bad { color: var(--bad); } .muted { color: var(--muted); font-size: .9rem; }
+  .row { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .6rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Set up the box</h1>
+  <div class="warn" id="where"></div>
+
+  <section>
+    <h2>1. The box that exists</h2>
+    <div id="state" class="muted">looking for box.json…</div>
+    <div class="row"><button class="q" id="unlockExisting" hidden>Unlock it with a key that is already in it</button></div>
+    <div id="unlockMsg" class="muted"></div>
+  </section>
+
+  <section id="newNote">
+    <h2>2. What to protect (only for a new box)</h2>
+    <p class="muted">Paste the whole recovery note. It is locked in this page and cleared from the box below as soon as it is used.</p>
+    <textarea id="note" rows="5" spellcheck="false" autocomplete="off"></textarea>
+  </section>
+
+  <section>
+    <h2>3. Add the key that is plugged in</h2>
+    <input id="name" placeholder="name, e.g. hk-phone" value="hk-phone">
+    <div class="row"><button id="add">Add this key</button></div>
+    <div id="addMsg" class="muted"></div>
+  </section>
+
+  <section id="outBox" hidden>
+    <h2>4. The new box (public, safe to publish)</h2>
+    <textarea id="out" rows="8" readonly spellcheck="false"></textarea>
+    <div class="row"><button id="download">Download box.json</button><button class="q" id="verify">Test: unlock it now</button></div>
+    <div id="verifyMsg" class="muted"></div>
+  </section>
+</main>
+<script src="box.js"></script>
+<script>
+const $ = (id) => document.getElementById(id);
+const L = { e_cancel: 'It was cancelled or timed out. Try again and touch the key when it answers.',
+            e_nokey: 'This browser or key cannot do this (Chrome or Edge, key plugged in).', e_other: 'Something went wrong: ' };
+let box = null, dataKey = null, created = null;
+$('where').innerHTML = RP === 'localhost'
+  ? '<strong>Rehearsal on localhost.</strong> Keys added here do NOT work on lambdasistemi.net. Use a dummy note.'
+  : '<strong>Real address: ' + RP + '.</strong> Keys added here belong to this address only.';
+(async () => {
+  box = await loadBox('box.json');
+  $('state').textContent = box ? 'Found: ' + box.entries.length + ' key(s): ' + box.entries.map((e) => e.name).join(', ') : 'None yet: this will create a new box.';
+  $('unlockExisting').hidden = !box; $('newNote').hidden = !!box;
+})();
+$('unlockExisting').onclick = async () => {
+  $('unlockMsg').textContent = 'Waiting for a key already in the box (PIN, then touch)...';
+  try { dataKey = await unlockDataKey(box); $('unlockMsg').innerHTML = '<span class="ok">Unlocked: you can add another key now.</span>'; }
+  catch (e) { $('unlockMsg').innerHTML = '<span class="bad">' + niceError(e, L) + '</span>'; }
+};
+$('add').onclick = async () => {
+  const name = $('name').value.trim(); if (!name) { $('addMsg').textContent = 'Give the key a name.'; return; }
+  $('add').disabled = true;
+  try {
+    let out;
+    if (box) {
+      if (!dataKey) throw new Error('First unlock the existing box with a key that is already in it (section 1).');
+      $('addMsg').textContent = 'Waiting for the NEW key: PIN and touch, twice...';
+      out = await addKey(box, name, null, dataKey);
+    } else {
+      const note = $('note').value; if (!note.trim()) throw new Error('Paste the note to protect (section 2).');
+      $('addMsg').textContent = 'Waiting for your key: PIN and touch, twice...';
+      out = await addKey(null, name, note, null);
+      $('note').value = '';
+    }
+    created = out; $('out').value = JSON.stringify(out, null, 2); $('outBox').hidden = false;
+    $('addMsg').innerHTML = '<span class="ok">Added "' + name + '". Download the file and publish it as box.json.</span>';
+  } catch (e) { $('addMsg').innerHTML = '<span class="bad">' + niceError(e, L) + '</span>'; }
+  finally { $('add').disabled = false; }
+};
+$('download').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([$('out').value], { type: 'application/json' })); a.download = 'box.json'; a.click(); };
+$('verify').onclick = async () => {
+  $('verifyMsg').textContent = 'Unlocking the new box with a key in it (PIN, touch)...';
+  try { const d = await unlockDataKey(created); const note = await decryptNote(created, d);
+        $('verifyMsg').innerHTML = '<span class="ok">It opens. It contains a Secret Key: ' + (SECRET_KEY_RE.test(note) ? 'yes' : 'NO (check what you pasted)') + ' (' + note.length + ' characters).</span>'; }
+  catch (e) { $('verifyMsg').innerHTML = '<span class="bad">' + niceError(e, L) + '</span>'; }
+};
+</script>
+</body>
+</html>
