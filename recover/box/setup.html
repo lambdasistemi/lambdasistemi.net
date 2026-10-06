@@ -28,7 +28,7 @@
   <section>
     <h2>1. The box that exists</h2>
     <div id="state" class="muted">looking for box.json…</div>
-    <div class="row"><button class="q" id="unlockExisting" hidden>Unlock it with a key that is already in it</button></div>
+    <div class="row"><button class="q" id="unlockExisting" hidden>Unlock it with a key that is already in it</button><button class="q" id="startNew" hidden>Start a new box instead (replaces the existing one when you publish)</button></div>
     <div id="unlockMsg" class="muted"></div>
   </section>
 
@@ -65,7 +65,12 @@ $('where').innerHTML = RP === 'localhost'
   box = await loadBox('box.json');
   $('state').textContent = box ? 'Found: ' + box.entries.length + ' key(s): ' + box.entries.map((e) => e.name).join(', ') : 'None yet: this will create a new box.';
   $('unlockExisting').hidden = !box; $('newNote').hidden = !!box;
+  $('startNew').hidden = !box;
 })();
+$('startNew').onclick = () => {
+  box = null; dataKey = null; $('state').textContent = 'Starting a NEW box. The one that exists now is replaced only when you publish the new file.';
+  $('unlockExisting').hidden = true; $('startNew').hidden = true; $('newNote').hidden = false; $('unlockMsg').textContent = '';
+};
 $('unlockExisting').onclick = async () => {
   $('unlockMsg').textContent = 'Waiting for a key already in the box (PIN, then touch)...';
   try { dataKey = await unlockDataKey(box); $('unlockMsg').innerHTML = '<span class="ok">Unlocked: you can add another key now.</span>'; }
