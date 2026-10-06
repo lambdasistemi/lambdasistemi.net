@@ -1,0 +1,14 @@
+{
+  "v": 1,
+  "rpId": "lambdasistemi.net",
+  "entries": [
+    {
+      "name": "hk-home",
+      "id": "wRxM+4DmDRFPKZSAfI1BaU+nmuwSJ3HQlhQaZHc9urtdyxWn95FLcyVOwY6W0UNduxdJBj/5bsg3st1nJFU0itXQRzrosyt40+epem5mTiBqdLELWFmBjLyWjd5snntq",
+      "wrapIv": "m944j2G0IqfIGjm5",
+      "wrapped": "dIeWGn9jytxCKYmuO6/TaUPQ8ga9BD/KcZpVpLrdtWKhQ4DfNxC1XlimSdj/k5Z5"
+    }
+  ],
+  "iv": "Ig1uzw8RA7Nmn6T0",
+  "ct": "uyMa+ZwVFUcPF/tV/K3EF3TxrcTrtMl5nw=="
+}
